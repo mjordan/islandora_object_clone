@@ -4,13 +4,21 @@ Copies an Islandora object and persists the copy much in the same manner that ht
 
 ## Introduction
 
-Performs a shallow clone of the source object, that is, it only copies the object properties and datastreams. It does not generate new objects corresponding to any children the source object have.
+Performs a shallow clone of the source object, that is, it only copies the object properties and datastreams. It does not generate new objects corresponding to any children the source object has.
 
 ## Requirements
 
 * [Islandora](https://github.com/Islandora/islandora)
 
 ## Usage
+
+## Installation
+
+Same as any Drupal module.
+
+## Usage
+
+Users with permission to ingest objects see a "Clone" tab for each object. Clicking on this tab reveals a form that asks for the label and namespace of the cloned object. Clicking on the "Clone object" button in this form creates a new object based on the source object, with the current user as its owner.
 
 ## Maintainer
 
@@ -23,4 +31,3 @@ Pull requests are welcome, as are use cases and suggestions.
 ## License
 
 * [GPLv3](http://www.gnu.org/licenses/gpl-3.0.txt)
-* The sample metadata in includes/sample_metadata.tsv is distriubuted under the [Creative Commons Attribution-NonCommercial 3.0 Unported](http://creativecommons.org/licenses/by-nc/3.0/legalcode) license.
