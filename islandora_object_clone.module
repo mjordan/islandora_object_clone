@@ -1,0 +1,27 @@
+<?php
+
+
+/**
+ * Implements hook_menu().
+ */
+function islandora_object_clone_menu() {
+  $items = array();
+  $items['islandora/object/%islandora_object/clone'] = array(
+    'title' => 'Clone',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('islandora_object_clone_confirm_form'),
+    'file' => 'includes/confirm.form.inc',
+    'type' => MENU_LOCAL_TASK,
+    'access callback' => 'islandora_object_manage_access_callback',
+    'access arguments' => array(
+      array(
+        ISLANDORA_MANAGE_PROPERTIES,
+        ISLANDORA_METADATA_EDIT,
+        ISLANDORA_ADD_DS,
+        ISLANDORA_PURGE,
+        ISLANDORA_INGEST,
+      ), 2),
+  );
+  return $items;
+}
+
