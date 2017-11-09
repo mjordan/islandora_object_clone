@@ -1,6 +1,6 @@
 # Islandora Object Clone
 
-Copies an Islandora object and persists the copy much in the same manner that https://www.drupal.org/project/node_clone does for Drupal nodes.
+Copies an Islandora object and persists the copy much in the same manner that [Node Clone](https://www.drupal.org/project/node_clone) does for Drupal nodes.
 
 ## Introduction
 
@@ -10,15 +10,13 @@ Performs a shallow clone of the source object, that is, it only copies the objec
 
 * [Islandora](https://github.com/Islandora/islandora)
 
-## Usage
-
 ## Installation
 
 Same as any Drupal module.
 
 ## Usage
 
-Users with permission to ingest objects see a "Clone" tab for each object. Clicking on this tab reveals a form that asks for the label and namespace of the cloned object. Clicking on the "Clone object" button in this form creates a new object based on the source object, with the current user as its owner.
+Users with permission to ingest objects see a "Clone" tab for each object. Clicking on this tab reveals a form that asks for the label and namespace of the cloned object. Clicking on the "Clone object" button in this form creates a new object based on the source object, with the current user as its owner. 
 
 ## Maintainer
 
@@ -26,7 +24,7 @@ Users with permission to ingest objects see a "Clone" tab for each object. Click
 
 ## Development and feedback
 
-Pull requests are welcome, as are use cases and suggestions.
+Use cases, suggestions, and bug reports, as well as pull requests, are welcome. Please see CONTRIBUTING.md for more information.
 
 ## License
 
