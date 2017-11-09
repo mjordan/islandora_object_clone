@@ -40,11 +40,29 @@
  * We should not copy the RELS-EXT or RELS-INT since they should be rebuilt
  * using relationships.
  *
- * @param string $source_pid
+ * @param array $form_state
+ *   The $form_state from the submitted confirmation form.
  *
  * @return string $clone_pid
  */
-function islandora_object_clone_clone_object($source_pid) {
+function islandora_object_clone_clone_object($form_state) {
+  $source_pid = $form_state['values']['islandora_object_clone_source_pid'];
+  $confirmed_namespace = $form_state['values']['islandora_object_clone_confirm_namespace'];
+  $confirmed_label = trim($form_state['values']['islandora_object_clone_confirm_label']);
+  $confirmed_state = trim($form_state['values']['islandora_object_clone_confirm_state']);
+
   $source_object = islandora_object_load($source_pid);
-  return $source_object->id;
+
+  $tuque = islandora_get_tuque_connection();
+  $repository = $tuque->repository;
+  $obj = $repository->constructObject($confirmed_namespace);
+
+  global $user;
+  $obj->owner = $user->name;
+  $obj->label = $confirmed_label;
+  $obj->state = $confirmed_state;
+
+  $new_object = $repository->ingestObject($obj);
+
+  return $new_object->id;
 }

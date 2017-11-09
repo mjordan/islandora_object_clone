@@ -22,8 +22,8 @@ function islandora_object_clone_confirm_form(array $form, array &$form_state) {
     '#markup' => t("You are about to clone this object."),
   );
 
-  $form['islandora_object_clone_confirm_title'] = array(
-    '#title' => t('Title'),
+  $form['islandora_object_clone_confirm_label'] = array(
+    '#title' => t('Label'),
     '#type' => 'textfield',
     '#default_value' => 'Clone: ' . $object->label,
     '#description' => t("Title to assign to the object."),
@@ -38,6 +38,18 @@ function islandora_object_clone_confirm_form(array $form, array &$form_state) {
     '#default_value' => $namespace,
     '#description' => t("Namespace to assign to the object. Do not include the trailing colon."),
     '#required' => TRUE,
+  );
+
+  $form['islandora_object_clone_confirm_state'] = array(
+    '#title' => t('State'),
+    '#type' => 'select',
+    '#required' => TRUE,
+    '#options' => array(
+      'A' => 'Active',
+      'I' => 'Inactive',
+      'D' => 'Deleted',
+    ),
+    '#default_value' => $object->state,
   );
   $form['islandora_object_clone_source_pid'] = array(
     '#type' => 'value',
@@ -61,9 +73,9 @@ function islandora_object_clone_confirm_form(array $form, array &$form_state) {
  */
 function islandora_object_clone_confirm_form_submit(array $form, array &$form_state) {
   module_load_include('inc', 'islandora_object_clone', 'includes/utilities');
-  $source_pid = $form['islandora_object_clone_source_pid']['#value'];
-  if ($clone_pid = islandora_object_clone_clone_object($source_pid)) {
-    // @todo: Redirect to new object.
-    dsm("Source object's PID is " . $clone_pid);
+  $source_pid = $form_state['values']['islandora_object_clone_source_pid'];
+  if ($clone_pid = islandora_object_clone_clone_object($form_state)) {
+    drupal_set_message(t("Object @clone_pid cloned from @source_pid.", array('@clone_pid' => $clone_pid, '@source_pid' => $source_pid)));
+    drupal_goto('islandora/object/' . $clone_pid);
   }
 }
