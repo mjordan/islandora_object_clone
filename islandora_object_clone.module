@@ -1,5 +1,9 @@
 <?php
 
+/**
+ * @file
+ * Module file for Islandora Object Clone.
+ */
 
 /**
  * Implements hook_menu().
@@ -24,4 +28,3 @@ function islandora_object_clone_menu() {
   );
   return $items;
 }
-

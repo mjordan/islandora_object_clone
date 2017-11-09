@@ -43,7 +43,8 @@
  * @param array $form_state
  *   The $form_state from the submitted confirmation form.
  *
- * @return string $clone_pid
+ * @return string
+ *   The PID of the cloned object.
  */
 function islandora_object_clone_clone_object($form_state) {
   $source_pid = $form_state['values']['islandora_object_clone_source_pid'];
@@ -62,7 +63,51 @@ function islandora_object_clone_clone_object($form_state) {
   $obj->label = $confirmed_label;
   $obj->state = $confirmed_state;
 
-  $new_object = $repository->ingestObject($obj);
+  // Let's talk relationships. Copy them all from the source to the
+  // cloned object.
+  foreach ($source_object->relationships->get() as $rel) {
+    $obj->relationships->add(
+      $rel['predicate']['namespace'],
+      $rel['predicate']['value'],
+      $rel['object']['value']
+    );
+  }
 
+  // Datastreams.
+  $cloned_datastreams = islandora_object_clone_datastreams($source_object);
+  foreach ($cloned_datastreams as $ds) {
+    $obj->ingestDatastream($ds);
+  }
+
+  $new_object = $repository->ingestObject($obj);
   return $new_object->id;
+}
+
+
+/**
+ * Clones the source object's datastreams.
+ *
+ * @param object $source_object
+ *   The source object.
+ *
+ * @return array
+ *   A list of all the cloned datastreams to add to the cloned object.
+ */
+function islandora_object_clone_datastreams($source_object) {
+  $skip_these = array('RELS-EXT');
+  $cloned_datastreams = array();
+  foreach ($source_object as $source_ds) {
+    if (!in_array($source_ds->id, $skip_these)) {
+      $ds = $source_object->constructDatastream($source_ds->id, $source_ds->controlGroup);
+      $ds->label = $source_ds->label;
+      $ds->setContentFromString($source_ds->content);
+      $ds->mimetype = $source_ds->mimetype;
+      $ds->checksumType = $source_ds->checksumType;
+      $ds->versionable = $source_ds->versionable;
+      $ds->state = $source_ds->state;
+      $cloned_datastreams[] = $ds;
+    }
+  }
+
+  return $cloned_datastreams;
 }

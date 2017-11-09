@@ -19,20 +19,20 @@
 function islandora_object_clone_confirm_form(array $form, array &$form_state) {
   $object = menu_get_object('islandora_object', 2);
   $form['islandora_object_clone_confirm_message'] = array(
-    '#markup' => t("You are about to clone this object."),
+    '#markup' => t("You are about to clone this object. Children (pages, compound children, collection memebers, etc.) are not cloned."),
   );
 
   $form['islandora_object_clone_confirm_label'] = array(
-    '#title' => t('Label'),
+    '#title' => t('Label of new object'),
     '#type' => 'textfield',
-    '#default_value' => 'Clone: ' . $object->label,
+    '#default_value' => 'Clone of: ' . $object->label,
     '#description' => t("Title to assign to the object."),
     '#required' => TRUE,
   );
 
   $namespace = preg_replace('/:.*$/', '', $object->id);
   $form['islandora_object_clone_confirm_namespace'] = array(
-    '#title' => t('Namespace'),
+    '#title' => t('Namespace of new object'),
     '#type' => 'textfield',
     '#size' => 30,
     '#default_value' => $namespace,
@@ -41,7 +41,7 @@ function islandora_object_clone_confirm_form(array $form, array &$form_state) {
   );
 
   $form['islandora_object_clone_confirm_state'] = array(
-    '#title' => t('State'),
+    '#title' => t('State of new object'),
     '#type' => 'select',
     '#required' => TRUE,
     '#options' => array(
