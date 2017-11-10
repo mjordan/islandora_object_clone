@@ -22,13 +22,19 @@ function islandora_object_clone_admin_form(array $form, array &$form_state) {
     return isset($form_state['values'][$name]) ? $form_state['values'][$name] : variable_get($name, $default);
   };
 
+ $form['islandora_object_clone_cmodels'] = array(
+    '#title' => t("Allowed content models"),
+    '#type' => 'fieldset',
+    '#collapsible' => TRUE,
+    '#collapsed' => TRUE,
+  );
+
   $cmodels = islandora_object_clone_get_cmodels();
-  $form['islandora_object_clone_allowed_cmodels'] = array(
+  $form['islandora_object_clone_cmodels']['islandora_object_clone_allowed_cmodels'] = array(
     '#type' => 'checkboxes',
     '#options' => $cmodels,
-    '#title' => t("Allowed content models"),
     '#default_value' => variable_get('islandora_object_clone_allowed_cmodels', array()),
-    '#description' => t("The Clone tab will only show up for objects with the selected content models. Note that cloning objects that have sequence relationships to parent objects, such as pages and compound children, can have unpredictable effects."),
+    '#description' => t("The Clone tab will only show up for objects with the selected content models. Note that the 'Allow objects with sequence relationships to be cloneable' setting below overrides content models selected here."),
   );
 
   $form['islandora_object_clone_allow_sequenced'] = array(
