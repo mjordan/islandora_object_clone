@@ -10,6 +10,15 @@
  */
 function islandora_object_clone_menu() {
   $items = array();
+  $items['admin/islandora/tools/object_clone'] = array(
+    'title' => 'Object Clone',
+    'description' => 'Configure Islandora Object Clone.',
+    'page callback' => 'drupal_get_form',
+    'access arguments' => array('administer site configuration'),
+    'page arguments' => array('islandora_object_clone_admin_form'),
+    'file' => 'includes/admin.form.inc',
+    'type' => MENU_NORMAL_ITEM,
+  );
   $items['islandora/object/%islandora_object/clone'] = array(
     'title' => 'Clone',
     'page callback' => 'drupal_get_form',

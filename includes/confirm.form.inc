@@ -17,6 +17,7 @@
  *   The drupal form definition.
  */
 function islandora_object_clone_confirm_form(array $form, array &$form_state) {
+  module_load_include('inc', 'islandora_object_clone', 'includes/utilities');
   $object = menu_get_object('islandora_object', 2);
   $form['islandora_object_clone_confirm_message'] = array(
     '#markup' => t("You are about to clone this object. Children (pages, compound children, collection memebers, etc.) are not cloned."),
@@ -39,7 +40,6 @@ function islandora_object_clone_confirm_form(array $form, array &$form_state) {
     '#description' => t("Namespace to assign to the object. Do not include the trailing colon."),
     '#required' => TRUE,
   );
-
   $form['islandora_object_clone_confirm_state'] = array(
     '#title' => t('State of new object'),
     '#type' => 'select',
@@ -50,6 +50,16 @@ function islandora_object_clone_confirm_form(array $form, array &$form_state) {
       'D' => 'Deleted',
     ),
     '#default_value' => $object->state,
+  );
+  $collections = islandora_object_clone_get_collections();
+  $default_collections = islandora_object_clone_get_default_collections($object);
+  $form['islandora_object_clone_confirm_collections'] = array(
+    '#title' => t('Collections to put the new object in'),
+    '#type' => 'select',
+    '#required' => TRUE,
+    '#multiple' => TRUE,
+    '#options' => $collections,
+    '#default_value' => $default_collections,
   );
   $form['islandora_object_clone_source_pid'] = array(
     '#type' => 'value',

@@ -48,9 +48,10 @@
  */
 function islandora_object_clone_clone_object($form_state) {
   $source_pid = $form_state['values']['islandora_object_clone_source_pid'];
-  $confirmed_namespace = $form_state['values']['islandora_object_clone_confirm_namespace'];
+  $confirmed_namespace = trim($form_state['values']['islandora_object_clone_confirm_namespace']);
   $confirmed_label = trim($form_state['values']['islandora_object_clone_confirm_label']);
-  $confirmed_state = trim($form_state['values']['islandora_object_clone_confirm_state']);
+  $confirmed_state = $form_state['values']['islandora_object_clone_confirm_state'];
+  $confirmed_collections = $form_state['values']['islandora_object_clone_confirm_collections'];
 
   $source_object = islandora_object_load($source_pid);
 
@@ -66,11 +67,17 @@ function islandora_object_clone_clone_object($form_state) {
   // Let's talk relationships. Copy them all from the source to the
   // cloned object.
   foreach ($source_object->relationships->get() as $rel) {
-    $obj->relationships->add(
-      $rel['predicate']['namespace'],
-      $rel['predicate']['value'],
-      $rel['object']['value']
-    );
+    // Skip copying collection membership(s), since we reassign it/them below.
+    if ($rel['predicate']['value'] != 'isMemberOfCollection') {
+      $obj->relationships->add(
+        $rel['predicate']['namespace'],
+        $rel['predicate']['value'],
+        $rel['object']['value']
+      );
+    }
+  }
+  foreach ($confirmed_collections as $collection) {
+    $obj->relationships->add(FEDORA_RELS_EXT_URI, 'isMemberOfCollection', $collection);
   }
 
   // Datastreams.
@@ -110,4 +117,81 @@ function islandora_object_clone_datastreams($source_object) {
   }
 
   return $cloned_datastreams;
+}
+
+/**
+ * Query the resource index to get a list of collections.
+ *
+ * @return array
+ *   Associative array of pid => label pairs.
+ */
+function islandora_object_clone_get_collections() {
+  // Query the rindex to get all collections.
+  $tuque = islandora_get_tuque_connection();
+  $ri_query = 'PREFIX fedora-model: <info:fedora/fedora-system:def/model#>
+select $object $label from <#ri>
+     where  { $object fedora-model:hasModel <info:fedora/islandora:collectionCModel> ;
+      fedora-model:label $label . }
+order by ($label)';
+  $results = $tuque->repository->ri->sparqlQuery($ri_query, 'unlimited');
+  $collections = array();
+  foreach ($results as $member) {
+    $pid = preg_replace('/info:fedora\//', '', $member['object']['value']);
+    $label = $member['label']['value'];
+    // We don't want the root collection.
+    if ($pid != 'islandora:root') {
+      $collections[$pid] = $label . ' (' . $pid . ')';
+    }
+  }
+  return $collections;
+}
+
+/**
+ * Get the first collection that an object belongs to.
+ *
+ * @param object $object
+ *   The source object.
+ * 
+ * @return array
+ *   Array of collection PIDs the object belongs to.
+ */
+function islandora_object_clone_get_default_collections($object) {
+  $collections = $object->relationships->get(FEDORA_RELS_EXT_URI, 'isMemberOfCollection');
+  $default_collections = array();
+  foreach ($collections as $collection) {
+    $default_collections[] = $collection['object']['value'];
+  }
+  return $default_collections;
+}
+
+/**
+ * Query the resource index to get a list of all content model objects.
+ *
+ * @return array
+ *   Associative array of pid => label pairs.
+ */
+function islandora_object_clone_get_cmodels() {
+  $skip_these = array(
+    'fedora-system:FedoraObject-3.0',
+    'fedora-system:ServiceDefinition-3.0',
+    'fedora-system:ContentModel-3.0',
+    'fedora-system:ServiceDeployment-3.0',
+  );
+
+  // Query the rindex to get all cmodels.
+  $tuque = islandora_get_tuque_connection();
+  $ri_query = 'PREFIX fedora-model: <info:fedora/fedora-system:def/model#>
+select $object $label from <#ri>
+     where { $object fedora-model:hasModel <info:fedora/fedora-system:ContentModel-3.0> ;
+      fedora-model:label $label .}';
+  $results = $tuque->repository->ri->sparqlQuery($ri_query, 'unlimited');
+  $cmodels = array();
+  foreach ($results as $member) {
+    if (!in_array($member['object']['value'], $skip_these)) {
+      $pid = preg_replace('/info:fedora\//', '', $member['object']['value']);
+      $label = $member['label']['value'];
+      $cmodels[$pid] = $label;
+    }
+  }
+  return $cmodels;
 }
