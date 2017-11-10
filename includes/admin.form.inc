@@ -22,7 +22,7 @@ function islandora_object_clone_admin_form(array $form, array &$form_state) {
     return isset($form_state['values'][$name]) ? $form_state['values'][$name] : variable_get($name, $default);
   };
 
- $form['islandora_object_clone_cmodels'] = array(
+  $form['islandora_object_clone_cmodels'] = array(
     '#title' => t("Allowed content models"),
     '#type' => 'fieldset',
     '#collapsible' => TRUE,

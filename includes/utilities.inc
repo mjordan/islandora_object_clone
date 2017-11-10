@@ -14,8 +14,7 @@
  * object using them; we'll also need to iterate over the source object's
  * datastreams and ingest the new version of each of those as well.
  *
- * We do not copy RELS-EXT since it is rebuilt using relationships. Not sure
- * about RELS-INT.
+ * We do not copy RELS-EXT or RELS-INT since they rebuilt using relationships.
  *
  * @param array $form_state
  *   The $form_state from the submitted confirmation form.
@@ -88,7 +87,7 @@ function islandora_object_clone_clone_object($form_state) {
  *   A list of all the cloned datastreams to add to the cloned object.
  */
 function islandora_object_clone_datastreams($source_object) {
-  $skip_these = array('RELS-EXT');
+  $skip_these = array('RELS-EXT', 'RELS-INT');
   $cloned_datastreams = array();
   foreach ($source_object as $source_ds) {
     if (!in_array($source_ds->id, $skip_these)) {
@@ -103,6 +102,15 @@ function islandora_object_clone_datastreams($source_object) {
       if (isset($source_ds->url)) {
         $ds->url = $source_ds->url;
       }
+
+      foreach ($source_ds->relationships->get() as $rel) {
+        $ds->relationships->add(
+          $rel['predicate']['namespace'],
+          $rel['predicate']['value'],
+          $rel['object']['value']
+        );
+      }
+
       $cloned_datastreams[] = $ds;
     }
   }
