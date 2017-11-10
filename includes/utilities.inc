@@ -14,7 +14,8 @@
  * object using them; we'll also need to iterate over the source object's
  * datastreams and ingest the new version of each of those as well.
  *
- * We do not copy RELS-EXT or RELS-INT since they rebuilt using relationships.
+ * We do not copy RELS-EXT or RELS-INT since they are rebuilt using
+ * relationships.
  *
  * @param array $form_state
  *   The $form_state from the submitted confirmation form.
@@ -41,10 +42,9 @@ function islandora_object_clone_clone_object($form_state) {
   $obj->state = $confirmed_state;
   $obj->logMessage = "Cloned from " . $source_pid . '.';
 
-  // Let's talk relationships. Copy them all from the source to the
-  // cloned object.
+  // Let's talk relationships. Copy them all (except for collection
+  // relationships) from the source to the new object.
   foreach ($source_object->relationships->get() as $rel) {
-    // Skip copying collection membership(s), since we reassign it/them below.
     if ($rel['predicate']['value'] != 'isMemberOfCollection') {
       $obj->relationships->add(
         $rel['predicate']['namespace'],
@@ -53,6 +53,7 @@ function islandora_object_clone_clone_object($form_state) {
       );
     }
   }
+  // Define collection relationships based on form input values.
   foreach ($confirmed_collections as $collection) {
     $obj->relationships->add(FEDORA_RELS_EXT_URI, 'isMemberOfCollection', $collection);
   }
@@ -200,7 +201,7 @@ select $object $label from <#ri>
 }
 
 /**
- * Determine if an object has an isSequenceNumberOf* relationships.
+ * Determine if an object is free of isSequenceNumberOf* relationships.
  *
  * @param object $object
  *   The source object.

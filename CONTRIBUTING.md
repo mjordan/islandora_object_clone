@@ -55,7 +55,7 @@ Contributions to the Islandora Object Clone codebase should be sent as GitHub pu
     2. Comment on the issue with your plan for implementing the enhancement. Explain what pieces of the codebase you are going to touch and how everything is going to fit together.
     3. The Islandora Object Clone maintainers will work with you on the design to make sure you are on the right track.
     4. Implement your issue, create a pull request (see below), and iterate from there.
-    5. Please run `drush dcs --extensions=inc` and `drush coder-review --reviews=production,security,style,i18n,potx,sniffer islandora_solution_pack_remote_resource` before committing to your branch.
+    5. Please run `drush dcs --extensions=inc` and `drush coder-review --reviews=production,security,style,i18n,potx,sniffer islandora_object_clone` before committing to your branch.
     6. If you code is testable, please add appropriate tests.
 
 #### Issue / Topic Branches
