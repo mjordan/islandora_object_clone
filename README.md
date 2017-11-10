@@ -29,9 +29,9 @@ Users with permission to manage objects (as defined by the Islandora module) are
   * label
   * state
   * namespace
-* the user is also asked to select which collection(s) to add the cloned object to (form defaults to the source object's parent collection(s)).
+* the user is also asked to select which collection(s) to add the cloned object to (form defaults to the source object's immediate parent collection(s)).
 
-Apart from these differences, the new object's content model and other RELS-EXT relationships (except for collection membership) are the same as the source object, as are all datastreams (other than RELS-EXT, which is rebuilt in the new object from its source object's relationsips and its assigned collection membership). One notable exception is that any relationships held by the cloned datastreams are not preserved; datastream relatoinships are not used in Islandora so this limitation should be inconsequential.
+Apart from these differences, the new object's content model and other RELS-EXT relationships (except for collection membership) are the same as the source object, as are all datastreams (other than RELS-EXT, which is rebuilt in the new object from its source object's relationsips and its assigned collection membership). One notable exception is that any relationships held by the cloned datastreams are not preserved; datastream relationships are not used in Islandora so this limitation should be inconsequential.
 
 ## Maintainer
 
