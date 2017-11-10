@@ -51,6 +51,7 @@ function islandora_object_clone_menu() {
  *   TRUE if the user is allowed to access this object, FALSE otherwise.
  */
 function islandora_object_clone_access_callback($perms, $object = NULL) {
+  module_load_include('inc', 'islandora_object_clone', 'includes/utilities');
   $object_models = $object->models;
   $allowed_models = variable_get('islandora_object_clone_allowed_cmodels', array());
   $allowed_models_filtered = array();
@@ -61,7 +62,9 @@ function islandora_object_clone_access_callback($perms, $object = NULL) {
   }
   $intersection = array_intersect($object_models, $allowed_models_filtered);
 
-  if (islandora_object_manage_access_callback($perms, $object) && count($intersection) > 0) {
+  $sequence_free = islandora_object_clone_is_sequence_free($object);
+
+  if ($sequence_free && islandora_object_manage_access_callback($perms, $object) && count($intersection) > 0) {
     return TRUE;
   }
 }

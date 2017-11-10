@@ -14,31 +14,8 @@
  * object using them; we'll also need to iterate over the source object's
  * datastreams and ingest the new version of each of those as well.
  *
- * Some properties we'll need to populate:
- *
- * -label
- * -logMessage (e.g., cloned from....)
- * -models
- * -owner
- * -relationships
- * -state - but maybe this should be a user option?
- *
- * some datastream properties we'll need to populate:
- *
- * -checksumType
- * -content (via setContentFromString())
- * -controlGroup
- * -format (if it is set in the source)
- * -label
- * -logMessage (e.g., cloned from....)
- * -mimeType
- * -relationships (if set in the source)
- * -state
- * -url (if it is set in the source)
- * -versionable 
- *
- * We should not copy the RELS-EXT or RELS-INT since they should be rebuilt
- * using relationships.
+ * We do not copy RELS-EXT since it is rebuilt using relationships. Not sure
+ * about RELS-INT.
  *
  * @param array $form_state
  *   The $form_state from the submitted confirmation form.
@@ -63,6 +40,7 @@ function islandora_object_clone_clone_object($form_state) {
   $obj->owner = $user->name;
   $obj->label = $confirmed_label;
   $obj->state = $confirmed_state;
+  $obj->logMessage = "Cloned from " . $source_pid . '.';
 
   // Let's talk relationships. Copy them all from the source to the
   // cloned object.
@@ -94,6 +72,8 @@ function islandora_object_clone_clone_object($form_state) {
 /**
  * Clones the source object's datastreams.
  *
+ * Note: Does not clone datastream relationships.
+ *
  * @param object $source_object
  *   The source object.
  *
@@ -112,6 +92,10 @@ function islandora_object_clone_datastreams($source_object) {
       $ds->checksumType = $source_ds->checksumType;
       $ds->versionable = $source_ds->versionable;
       $ds->state = $source_ds->state;
+      $ds->format = $source_ds->format;
+      if (isset($source_ds->url)) {
+        $ds->url = $source_ds->url;
+      }
       $cloned_datastreams[] = $ds;
     }
   }
@@ -194,4 +178,24 @@ select $object $label from <#ri>
     }
   }
   return $cmodels;
+}
+
+/**
+ * Determine if an object has an isSequenceNumberOf* relationships.
+ *
+ * @param object $object
+ *   The source object.
+ * 
+ * @return bool
+ *   TRUE if the object has no sequence relationships, FALSE if it has any.
+ */
+function islandora_object_clone_is_sequence_free($object) {
+  $has_sequences = TRUE;
+  foreach ($object->relationships->get() as $rel) {
+    if (strstr($rel['predicate']['value'], 'isSequenceNumberOf')) {
+      $has_sequences = FALSE;
+    }
+  }
+
+  return $has_sequences;
 }

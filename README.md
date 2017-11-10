@@ -18,9 +18,11 @@ Same as any Drupal module.
 
 You can filter objects that can be cloned by content model at `admin/islandora/tools/object_clone`.
 
+Objects that have sequence relationships ('isSequenceNumber' and 'isSequenceNumberOfxxx') are always excluded from having a "Clone" tab, since cloning them would duplicate the sequence relationship and cause unpredictable results in the display of their sibling objects. These include all paged content and any other objects that are children of compound objects.
+
 ## Usage
 
-Users with permission to ingest objects see a "Clone" tab for each object. Clicking on this tab reveals a form that asks for the label and namespace of the cloned object. Clicking on the "Clone object" button in this form creates a new object based on the source object. The new object differs from its source in the following ways:
+Users with permission to manage objects see a "Clone" tab for each object. Clicking on this tab reveals a form that asks for the label, state, namespace, and collections of the object to be created. Clicking on the "Clone object" button in this form creates a new object based on the source object. The new object differs from its source in the following ways:
 
 * the new object's owner is the user who cloned it
 * the user is asked to supply the following properties of the new object (form defaults are taken from the source):

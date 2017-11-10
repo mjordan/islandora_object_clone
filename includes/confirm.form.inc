@@ -19,6 +19,7 @@
 function islandora_object_clone_confirm_form(array $form, array &$form_state) {
   module_load_include('inc', 'islandora_object_clone', 'includes/utilities');
   $object = menu_get_object('islandora_object', 2);
+
   $form['islandora_object_clone_confirm_message'] = array(
     '#markup' => t("You are about to clone this object. Children (pages, compound children, collection memebers, etc.) are not cloned."),
   );
