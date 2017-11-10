@@ -22,12 +22,12 @@ You can filter objects that can be cloned by content model at `admin/islandora/t
 
 Users with permission to ingest objects see a "Clone" tab for each object. Clicking on this tab reveals a form that asks for the label and namespace of the cloned object. Clicking on the "Clone object" button in this form creates a new object based on the source object. The new object differs from its source in the following ways:
 
+* the new object's owner is the user who cloned it
 * the user is asked to supply the following properties of the new object (form defaults are taken from the source):
   * label
   * state
   * namespace
-* the new object's owner is the user who cloned it
-* the user is also asked to select which collection(s) to add the cloned object to.
+* the user is also asked to select which collection(s) to add the cloned object to (form defaults to the source object's parent collection(s)).
 
 Apart from these differences, the object's content model and other RELS-EXT relationships (except for collection membership) are the same, as are all datastreams (other than RELS-EXT).
 
