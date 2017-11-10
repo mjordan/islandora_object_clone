@@ -92,6 +92,7 @@ function islandora_object_clone_datastreams($source_object) {
   foreach ($source_object as $source_ds) {
     if (!in_array($source_ds->id, $skip_these)) {
       $ds = $source_object->constructDatastream($source_ds->id, $source_ds->controlGroup);
+
       $ds->label = $source_ds->label;
       $ds->setContentFromString($source_ds->content);
       $ds->mimetype = $source_ds->mimetype;
@@ -110,6 +111,9 @@ function islandora_object_clone_datastreams($source_object) {
           $rel['object']['value']
         );
       }
+
+      // Allow other modules to modify the newly constructed  datastream.
+      drupal_alter('islandora_object_clone_newds', $ds, $source_object);
 
       $cloned_datastreams[] = $ds;
     }

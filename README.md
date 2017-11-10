@@ -35,6 +35,10 @@ Users with permission to manage objects (as defined by the Islandora module) are
 
 Apart from these differences, the new object's content model and other RELS-EXT relationships (except for collection membership) are the same as the source object, as are all datastreams other than RELS-EXT, which is rebuilt in the new object. RELS-INT is also rebuilt to incorporate relationships associated with datastreams.
 
+## Extending/customizing this module
+
+See the islandora_object_clone.api.php file for hooks this module defines.
+
 ## Maintainer
 
 * [Mark Jordan](https://github.com/mjordan)
