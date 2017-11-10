@@ -1,6 +1,6 @@
 # Islandora Object Clone
 
-Copies an Islandora object and persists the copy much in the same manner that [Node Clone](https://www.drupal.org/project/node_clone) does for Drupal nodes. At the end of the cloning process, you have a new object that is pretty much identical to the object it was clone from. Differences are listed below.
+Copies an Islandora object and persists the copy much in the same manner that [Node Clone](https://www.drupal.org/project/node_clone) does for Drupal nodes. At the end of the cloning process (click a tab, optionally fill in a couple of form fields), you have a new object that is pretty much identical to the object it was clone from. Differences are listed below.
 
 ## Introduction
 
