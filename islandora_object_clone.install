@@ -11,6 +11,7 @@
 function islandora_object_clone_uninstall() {
   $variables = array(
     'islandora_object_clone_allowed_cmodels',
+    'islandora_object_clone_allow_sequenced',
   );
   array_walk($variables, 'variable_del');
 }

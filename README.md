@@ -18,7 +18,7 @@ Same as any Drupal module.
 
 You will need to enable which content models source objects must have at `admin/islandora/tools/object_clone`.
 
-Objects that have sequence relationships ('isSequenceNumber' and 'isSequenceNumberOfxxx') are always excluded from having a "Clone" tab, since cloning them would duplicate their sequence relationship with their parent and cause unpredictable results in the display of their sibling objects. These include all paged content objects and any other objects that are children of compound objects.
+There is an option to allow objects that have sequence relationships ('isSequenceNumber' and 'isSequenceNumberOfxxx') to be cloneable. These include all paged content objects and any other objects that are children of compound objects. If checked, these objects will be cloneable like other objects, and users who clone them will be reminded to review their order within their parent objects. If unchecked, these objects will not be cloneable.
 
 ## Usage
 

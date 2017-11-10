@@ -31,5 +31,12 @@ function islandora_object_clone_admin_form(array $form, array &$form_state) {
     '#description' => t("The Clone tab will only show up for objects with the selected content models. Note that cloning objects that have sequence relationships to parent objects, such as pages and compound children, can have unpredictable effects."),
   );
 
+  $form['islandora_object_clone_allow_sequenced'] = array(
+    '#type' => 'checkbox',
+    '#title' => t("Allow objects with sequence relationships to be cloneable"),
+    '#description' => t("If checked, objects that have sequence relationships ('isSequenceNumber' and 'isSequenceNumberOfxxx') will be cloneable. Users will be reminded to review the new object's order within its parent object. If this box is unchecked, objects with sequence relationships will not be cloneable."),
+    '#default_value' => variable_get('islandora_object_clone_allow_sequenced', FALSE),
+  );
+
   return system_settings_form($form);
 }

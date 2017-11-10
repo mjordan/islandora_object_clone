@@ -65,6 +65,13 @@ function islandora_object_clone_clone_object($form_state) {
   }
 
   $new_object = $repository->ingestObject($obj);
+
+  if (variable_get('islandora_object_clone_allow_sequenced', FALSE)) {
+    if (!islandora_object_clone_is_sequence_free($new_object)) {
+      drupal_set_message(t("The cloned object you have just created (@pid) has sequence relationships and should appear next to its source object within its parent object. You may want to reorder it.", array('@pid' => $new_object->id)), 'warning');
+    }
+  }
+
   return $new_object->id;
 }
 

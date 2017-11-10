@@ -62,7 +62,12 @@ function islandora_object_clone_access_callback($perms, $object = NULL) {
   }
   $intersection = array_intersect($object_models, $allowed_models_filtered);
 
-  $sequence_free = islandora_object_clone_is_sequence_free($object);
+  if (variable_get('islandora_object_clone_allow_sequenced', FALSE)) {
+    $sequence_free = TRUE;
+  }
+  else {
+    $sequence_free = islandora_object_clone_is_sequence_free($object);
+  }
 
   if ($sequence_free && islandora_object_manage_access_callback($perms, $object) && count($intersection) > 0) {
     return TRUE;
