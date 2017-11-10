@@ -18,7 +18,7 @@ Same as any Drupal module.
 
 You can filter objects that can be cloned by content model at `admin/islandora/tools/object_clone`.
 
-Objects that have sequence relationships ('isSequenceNumber' and 'isSequenceNumberOfxxx') are always excluded from having a "Clone" tab, since cloning them would duplicate the sequence relationship and cause unpredictable results in the display of their sibling objects. These include all paged content and any other objects that are children of compound objects.
+Objects that have sequence relationships ('isSequenceNumber' and 'isSequenceNumberOfxxx') are always excluded from having a "Clone" tab, since cloning them would duplicate their sequence relationship with their parent and cause unpredictable results in the display of their sibling objects. These include all paged content objects and any other objects that are children of compound objects.
 
 ## Usage
 
