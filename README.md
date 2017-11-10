@@ -31,7 +31,7 @@ Users with permission to manage objects (as defined by the Islandora module) are
   * namespace
 * the user is also asked to select which collection(s) to add the cloned object to (form defaults to the source object's immediate parent collection(s)).
 
-Apart from these differences, the new object's content model and other RELS-EXT relationships (except for collection membership) are the same as the source object, as are all datastreams (other than RELS-EXT, which is rebuilt in the new object from its source object's relationsips and its assigned collection membership).
+Apart from these differences, the new object's content model and other RELS-EXT relationships (except for collection membership) are the same as the source object, as are all datastreams other than RELS-EXT, which is rebuilt in the new object. RELS-INT is also rebuilt to incorporate relationships associated with datastreams.
 
 ## Maintainer
 
