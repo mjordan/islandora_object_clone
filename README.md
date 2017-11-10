@@ -27,7 +27,7 @@ Users with permission to manage objects (as defined by the Islandora module) are
 * the new object's owner is the user who cloned it
 * the user is asked to supply the following properties of the new object (form defaults are taken from the source object):
   * label
-  * state
+  * state (is overridden by Islandora Simple Workflow)
   * namespace
 * the user is also asked to select which collection(s) to add the cloned object to (form defaults to the source object's immediate parent collection(s)).
 
