@@ -28,7 +28,7 @@ function islandora_object_clone_confirm_form(array $form, array &$form_state) {
     '#title' => t('Label of new object'),
     '#type' => 'textfield',
     '#default_value' => 'Clone of: ' . $object->label,
-    '#description' => t("Title to assign to the object."),
+    '#description' => t("Label to assign to the object."),
     '#required' => TRUE,
   );
 
@@ -62,13 +62,28 @@ function islandora_object_clone_confirm_form(array $form, array &$form_state) {
     '#options' => $collections,
     '#default_value' => $default_collections,
   );
+
+  $form['islandora_object_clone_copy_dc'] = array(
+    '#type' => 'checkbox',
+    '#title' => t("Copy the source object's DC datastream"),
+    '#description' => t("If checked, the source object's DC datastream will be copied to the new object."),
+    '#default_value' => FALSE,
+  );
+
+  $form['islandora_object_clone_redirect_to_metadata'] = array(
+    '#type' => 'checkbox',
+    '#title' => t("Take me directly to the MODS edit form"),
+    '#description' => t("If checked, you will be redirected to the MODS edit form."),
+    '#default_value' => FALSE,
+  );
+
   $form['islandora_object_clone_source_pid'] = array(
     '#type' => 'value',
     '#value' => $object->id,
   );
   $form['islandora_object_clone_confirm_clone'] = array(
     '#type' => 'submit',
-    '#value' => 'Clone object',
+    '#value' => t('Clone object'),
   );
 
   return $form;
@@ -86,7 +101,12 @@ function islandora_object_clone_confirm_form_submit(array $form, array &$form_st
   module_load_include('inc', 'islandora_object_clone', 'includes/utilities');
   $source_pid = $form_state['values']['islandora_object_clone_source_pid'];
   if ($clone_pid = islandora_object_clone_clone_object($form_state)) {
-    drupal_set_message(t("Object @clone_pid cloned from @source_pid.", array('@clone_pid' => $clone_pid, '@source_pid' => $source_pid)));
-    drupal_goto('islandora/object/' . $clone_pid);
+    if ($form_state['values']['islandora_object_clone_redirect_to_metadata']) {
+      drupal_goto('islandora/object/' . $clone_pid . '/datastream/MODS/edit');
+    }
+    else {
+      drupal_set_message(t("Object @clone_pid cloned from @source_pid.", array('@clone_pid' => $clone_pid, '@source_pid' => $source_pid)));
+      drupal_goto('islandora/object/' . $clone_pid);
+    }
   }
 }

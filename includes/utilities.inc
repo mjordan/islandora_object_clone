@@ -59,7 +59,7 @@ function islandora_object_clone_clone_object($form_state) {
   }
 
   // Datastreams.
-  $cloned_datastreams = islandora_object_clone_datastreams($source_object);
+  $cloned_datastreams = islandora_object_clone_datastreams($source_object, $form_state);
   foreach ($cloned_datastreams as $ds) {
     $obj->ingestDatastream($ds);
   }
@@ -83,12 +83,17 @@ function islandora_object_clone_clone_object($form_state) {
  *
  * @param object $source_object
  *   The source object.
+ * @param array $form_state
+ *   The $form_state from the submitted confirmation form.
  *
  * @return array
  *   A list of all the cloned datastreams to add to the cloned object.
  */
-function islandora_object_clone_datastreams($source_object) {
+function islandora_object_clone_datastreams($source_object, $form_state) {
   $skip_these = array('RELS-EXT', 'RELS-INT');
+  if (!$form_state['values']['islandora_object_clone_copy_dc']) {
+    $skip_these[] = 'DC';
+  }
   $cloned_datastreams = array();
   foreach ($source_object as $source_ds) {
     if (!in_array($source_ds->id, $skip_these)) {
