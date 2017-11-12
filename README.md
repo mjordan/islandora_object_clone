@@ -6,7 +6,7 @@ Copies an Islandora object and persists the copy much in the same manner that [N
 
 Performs a shallow clone of the source object, that is, it only copies the object properties and datastreams. It does not generate new objects corresponding to any children the source object has.
 
-MODS and DC are copied as is, with the exception that the new object's PID is added to a dc:identifier element (this is Fedora's default behavior). The source object's PID that existed in its DC is therefore also present in the new DC datastream. Also, any identifiers or other source-object-specific data, like DOIs or UUIDs, in MODS or other datastreams is also carried over. Reviewing the cloned metadata for this sort of data is probably a good habit to get into. The clone confirmation form contains an option to copy the DC datastream (default is to not copy it). If the DC datastream is not copied, it is generated automatically in the new object, the same way it is on normal object ingest.
+MODS and DC are copied as is, with the exception that the new object's PID is added to a dc:identifier element (this is Fedora's default behavior). The source object's PID that existed in its DC is therefore also present in the new DC datastream. Also, any identifiers or other source-object-specific data, like DOIs or UUIDs, in MODS or other datastreams is also carried over. Reviewing the cloned metadata for this sort of data is probably a good habit to get into. The clone confirmation form contains an option to copy the DC datastream (default is to not copy it). If the DC datastream is not copied, it is generated automatically in the new object, the same way it is on normal object ingest. It also contains an option for the user to be immediately redirected to the MODS edit form after submitting the "Clone object" button.
 
 ## Requirements
 
@@ -32,8 +32,7 @@ Users with permission to manage objects (as defined by the Islandora module) are
   * state (is overridden by Islandora Simple Workflow)
   * namespace
 * the user is asked to select which collection(s) to add the cloned object to (form defaults to the source object's immediate parent collection(s)).
-* the user is asked whether or not to copy the source object's DC datastream or not. If it is copied to the new object, it will contain the source object's PID in an `<
-identifier>` element.
+* the user is asked whether or not to copy the source object's DC datastream to the new object. If it is copied, it will contain the source object's PID, which as mentioned above, is probably not desirable. 
 
 Apart from these differences, the new object's content model and other RELS-EXT relationships (except for collection membership) are the same as in the source object, as are all datastreams other than RELS-EXT, which is rebuilt in the new object, and RELS-INT, which is rebuilt to incorporate relationships associated with datastreams.
 
