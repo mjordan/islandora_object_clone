@@ -31,7 +31,9 @@ Users with permission to manage objects (as defined by the Islandora module) are
   * label
   * state (is overridden by Islandora Simple Workflow)
   * namespace
-* the user is also asked to select which collection(s) to add the cloned object to (form defaults to the source object's immediate parent collection(s)).
+* the user is asked to select which collection(s) to add the cloned object to (form defaults to the source object's immediate parent collection(s)).
+* the user is asked whether or not to copy the source object's DC datastream or not. If it is copied to the new object, it will contain the source object's PID in an `<
+identifier>` element.
 
 Apart from these differences, the new object's content model and other RELS-EXT relationships (except for collection membership) are the same as in the source object, as are all datastreams other than RELS-EXT, which is rebuilt in the new object, and RELS-INT, which is rebuilt to incorporate relationships associated with datastreams.
 
